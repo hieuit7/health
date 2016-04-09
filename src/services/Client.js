@@ -1,12 +1,13 @@
 "use strict"
-let Socket = require("net").Socket;
-let EventEmitter = require("events").EventEmitter;
-let inherits = require('util').inherits;
-let lookup = require("dns").lookup;
-let Ssh = require("./ssh.js");
-let ElasticSearch = require("./elasticsearch.js");
-let MongoDb = require("./mongodb.js");
-let debug = require("debug")("Client");
+const Socket = require("net").Socket;
+const EventEmitter = require("events").EventEmitter;
+const inherits = require('util').inherits;
+const lookup = require("dns").lookup;
+const Domain = require("./domain.js");
+const Ssh = require("./ssh.js");
+const ElasticSearch = require("./elasticsearch.js");
+const MongoDb = require("./mongodb.js");
+const debug = require("debug")("Client");
 
 let Promise = require("promise");
 
@@ -23,20 +24,26 @@ class Client extends EventEmitter {
         }
     }
     connect(cfg) {
-        let self = this;
-        if (this._socket && this._socket.writeable) {
-            this.once('close', () => {
-                self.connect(cfg);
-            });
-        }
+
         let port = 80;
-        switch (cfg.protocal) {
+        switch (cfg.protocol) {
             case 'ssh':
                 port = 22;
                 break;
             case 'mongo':
                 port = 27017;
                 break;
+            case 'domain':
+                port = 80;
+                let domain = new Domain(cfg.host, cfg);
+                let promise = domain.look(cfg.host, cfg);
+                return promise;
+        }
+        let self = this;
+        if (this._socket && this._socket.writeable) {
+            this.once('close', () => {
+                self.connect(cfg);
+            });
         }
         var config = {
             host: cfg.host || this.config.localAddressp,
@@ -54,10 +61,10 @@ class Client extends EventEmitter {
              * description
              * Step to connect ssh
              */
-            switch (cfg.protocal) {
+            switch (cfg.protocol) {
                 case 'ssh':
                     // code
-                    let sshClient = new Ssh(this._socket);
+                    let sshClient = new Ssh(this._socket, cfg);
                     sshClient.connect(resolve, reject);
                     break;
                 case 'mongo':

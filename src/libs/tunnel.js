@@ -1,6 +1,6 @@
 "use strict"
-let tls = require("tls");
-class Tunnel extends tls.TLSSocket {
+let TLSSocket = require("tls").TLSSocket;
+class Tunnel extends TLSSocket {
     constructor(socket,options){
         super(socket,options);
     }

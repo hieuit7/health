@@ -1,18 +1,19 @@
 // JavaScript File
 "use strict"
 var lib = require("../src/index.js");
-var result = lib.domain.look("gitlab.resource", {
+var result = lib.look({
+    host:"gitlab.resource",
     port: 80
 });
 result.then(function(res) {
-    console.log(res);
+  console.log(res);
 }, function(res) {
     console.log(res);
 });
 
 //check ssh 
-let ssh = lib.service.ssh({
-    host: "localhost",
+let ssh = lib.ssh({
+    host: "gitlab.resource",
     port: 22
 });
 ssh.then((data) => {
@@ -22,15 +23,3 @@ ssh.then((data) => {
 }).then((data)=>{
     console.log(data+"");
 });
-
-// let elastic = lib.service.elasticSearch({
-//     host: "gitlab.resource"
-// });
-
-// elastic.then((data) => {
-//     console.log(data+"");
-// }, (error) => {
-//     console.log(error);
-// }).then((data)=>{
-//     console.log(data+"");
-// });
