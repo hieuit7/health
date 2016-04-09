@@ -4,8 +4,11 @@
  * 
  * 
  **/
- var domain = require("./domain.js");
+ "use strict"
+ let domain = require("./domain.js");
+ let service = require("./services/services.js");
  
  module.exports = {
-     domain: domain
+     domain: domain,
+     service: service,
  }

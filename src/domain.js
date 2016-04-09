@@ -6,14 +6,14 @@ let Debug = require("debug")('worker');
 let Promise = require("promise");
 let Domain = {
     look(domain, options ) {
-            return new Promise((reslove, reject) => {
+            return new Promise((resolve, reject) => {
                 let port = options.port;
                 try {
                     if (port == 80) {
-                        http.get("http://" + domain, reslove).on('error', reject);
+                        http.get("http://" + domain, resolve).on('error', reject);
                     }
                     else if (port === 443 ){
-                        https.get("https://" + domain, reslove).on('error', reject);
+                        https.get("https://" + domain, resolve).on('error', reject);
                     } else {
                         throw new Error("Protocal not found");
                     }
