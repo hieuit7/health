@@ -4,12 +4,11 @@ before_script:
   - nvm install v5.10.1
 stages:
   - test
-
 job1:
-  - stage: test
-  - script:
-     - node test.js
-  - only:
-     - master
-  - tags:
-     - docker
+  stage: test
+  script:
+    node test.js
+  only:
+    master
+  tags:
+    docker
