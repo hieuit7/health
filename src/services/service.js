@@ -5,19 +5,30 @@ class Service {
         this.socket = socket;
         this.resolve = undefined;
         this.reject = undefined;
+    }
+    onConnect(callback){
         this.socket.on('connect', () => {
             
-            debug("On connect");
         });
     }
-    onError(error){
-        //this.call(this.reject);
+    onError(callback){
+        this.socket.on('error', (data) => {
+            debug(data+"");
+            callback({status:"success",code:"ERROR"});
+        });
+    }
+    onTimeout(callback){
+        this.socket.on('error', (data) => {
+            debug(data+"");
+            callback({status:"success",code:"TIMEOUT"});
+        });
     }
     connect(resolve,reject){
         this.resolve = resolve;
         this.reject = reject;
-        this.socket.on('error',this.reject);
-        this.socket.on('timeout', this.reject);
+        this.onError(this.reject);
+        this.onTimeout(this.reject);
+        this.onConnect(this.resolve);   
     }
 }
 module.exports = Service;

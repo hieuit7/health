@@ -2,7 +2,8 @@
 "use strict"
 const http = require("http");
 const https = require("https");
-const Debug = require("debug")('worker');
+const debug = require("debug")('domain');
+const Dns = require("dns");
 const Promise = require("promise");
 
 class Domain {
@@ -13,19 +14,21 @@ class Domain {
             options.port = 80;
         };
         this.options = options;
+        debug(options);
     }
     look(domain, options) {
         let promise = new Promise((resolve, reject) => {
             let port = options.port;
+            
             try {
                 if (port == 80) {
                     http.get("http://" + domain, resolve).on('error', reject);
                 }
-                else if (port === 443) {
+                else if (port == 443) {
                     https.get("https://" + domain, resolve).on('error', reject);
                 }
                 else {
-                    throw new Error("Protocal not found");
+                    throw new Error("Protocol not found");
                 }
             }
             catch (e) {
@@ -35,7 +38,13 @@ class Domain {
         return promise.then((data)=>{
             return {status:"success",code:"OK"};
         },(error)=>{
+            debug(error);
             return {status:"success",code:"ERROR"};
+        })
+    }
+    whois(domain){
+        let dns = Dns.resolve('nguyenminhhieu.net',(data)=>{
+            console.log(data);
         })
     }
 }

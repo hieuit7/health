@@ -2,7 +2,7 @@
 let Client = require("./Client.js");
 let debug = require("debug")("Service");
 let client = new Client();
-class Service  {
+class Service {
   ssh(cfg) {
     cfg.protocol = "ssh";
     return client.connect(cfg);
@@ -11,8 +11,14 @@ class Service  {
     cfg.protocol = "elastic";
     return client.connect(cfg);
   }
-  look(cfg){
+  look(cfg) {
     cfg.protocol = 'domain';
+    return client.connect(cfg);
+  }
+  whois(domain) {
+    let cfg ={};
+    cfg.protocol = 'whois';
+    cfg.host = domain;
     return client.connect(cfg);
   }
 };

@@ -30,14 +30,18 @@ class Client extends EventEmitter {
             case 'ssh':
                 port = 22;
                 break;
-            case 'mongo':
-                port = 27017;
+            case 'elastic':
+                port = 9300;
                 break;
             case 'domain':
-                port = 80;
+                cfg.port = cfg.port || 80;
                 let domain = new Domain(cfg.host, cfg);
                 let promise = domain.look(cfg.host, cfg);
                 return promise;
+            case 'whois':
+                // let domain = new Domain(cfg.host, cfg);
+                // let promise = domain.whois(cfg.host);
+                // break;
         }
         let self = this;
         if (this._socket && this._socket.writeable) {
@@ -55,7 +59,8 @@ class Client extends EventEmitter {
             allowHalfOpen: true
         });
         this._socket = socket;
-        this._socket.connect(this.config.port, this.config.host);
+        this._socket.connect(this.config.port, this.config.host,(data)=>{
+        });
         return new Promise((resolve, reject) => {
             /**
              * description
@@ -71,7 +76,7 @@ class Client extends EventEmitter {
                     let mongo = new MongoDb(this._socket);
                     break;
                 case 'elastic':
-                    let elasticClient = new ElasticSearch(this._socket);
+                    let elasticClient = new ElasticSearch(this._socket,cfg);
                     elasticClient.connect(resolve, reject);
                     break;
                 default:
