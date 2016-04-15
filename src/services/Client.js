@@ -39,9 +39,13 @@ class Client extends EventEmitter {
                 let promise = domain.look(cfg.host, cfg);
                 return promise;
             case 'whois':
-                // let domain = new Domain(cfg.host, cfg);
-                // let promise = domain.whois(cfg.host);
-                // break;
+                let whois = new Domain(cfg.host, cfg);
+                let whoisRet = whois.whois(cfg.host);
+                return whoisRet;
+            case 'compareHtml':
+                let html = new Domain(cfg.host,cfg);
+                let compare = html.compare(cfg.host);
+                return compare;
         }
         let self = this;
         if (this._socket && this._socket.writeable) {
@@ -59,8 +63,7 @@ class Client extends EventEmitter {
             allowHalfOpen: true
         });
         this._socket = socket;
-        this._socket.connect(this.config.port, this.config.host,(data)=>{
-        });
+        this._socket.connect(this.config.port, this.config.host, (data) => {});
         return new Promise((resolve, reject) => {
             /**
              * description
@@ -76,7 +79,7 @@ class Client extends EventEmitter {
                     let mongo = new MongoDb(this._socket);
                     break;
                 case 'elastic':
-                    let elasticClient = new ElasticSearch(this._socket,cfg);
+                    let elasticClient = new ElasticSearch(this._socket, cfg);
                     elasticClient.connect(resolve, reject);
                     break;
                 default:

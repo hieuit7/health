@@ -21,5 +21,12 @@ class Service {
     cfg.host = domain;
     return client.connect(cfg);
   }
+  compare(url){
+    let cfg = {};
+    cfg.protocol = 'compareHtml';
+    cfg.port = 0;
+    cfg.host = url;
+    return client.connect(cfg);
+  }
 };
 module.exports = new Service();

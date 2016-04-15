@@ -51,9 +51,37 @@ let server = https.createServer(options, (req, res) => {
                         })
                         break;
                     case 'whois':
-                        // code
-                        break;
+                        request.then((data) => {
+                            debug(data + "");
+                            data = JSON.parse(data);
+                            let whoisRet = service.whois(data.host);
+                            whoisRet.then((res) => {
+                                debug(res);
+                                response.setData(res);
+                                resolve(response);
+                            }, (error) => {
 
+                            })
+                        }, (error) => {
+                            debug(error + "");
+                        });
+                        break;
+                    case 'compare':
+                        request.then((data)=>{
+                           debug(data+"sss");
+                           data= JSON.parse(data);
+                           let compare = service.compare(data.host);
+                           
+                          compare.then((data)=>{
+                              response.setData(data);
+                              resolve(response);
+                          },(error)=>{
+                               
+                          })
+                        },(error)=>{
+                            debug(error+"");
+                        });
+                        break;                    
                     default:
                         response.setData({
                             status: "success",
@@ -89,25 +117,26 @@ let server = https.createServer(options, (req, res) => {
                         })
                         break;
                     case 'elastic':
-                        request.then((data)=>{
-                            try{
+                        request.then((data) => {
+                            try {
                                 let cfg = JSON.parse(data);
                                 debug(cfg)
                                 let ret = service.elasticSearch(cfg);
-                                ret.then((data)=>{
+                                ret.then((data) => {
                                     response.setData(data);
                                     resolve(response);
-                                },(error)=>{
+                                }, (error) => {
                                     debug(error);
                                 })
-                                
-                            }catch(e){
+
+                            }
+                            catch (e) {
                                 debug(e);
                             }
-                        },(error)=>{
+                        }, (error) => {
                             debug(error);
                         })
-                        
+
                         break;
 
                 }
