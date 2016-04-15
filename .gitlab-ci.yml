@@ -4,6 +4,7 @@ before_script:
   - nvm install v5.10.1
   - npm install
 stages:
+  - build
   - test
 job1:
   stage: test
