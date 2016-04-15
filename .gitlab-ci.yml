@@ -1,4 +1,4 @@
-images: ubuntu:14.04
+image: ubuntu:14.04
 before_script:
   - apt-get update -qq && apt-get install -y curl
   - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
