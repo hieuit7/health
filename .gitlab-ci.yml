@@ -13,5 +13,8 @@ test:
     - docker
 deploy:
   stage: deploy
+  only:
+    - master
+    - dev
   script:
     - npm publish
