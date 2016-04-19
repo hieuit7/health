@@ -1,6 +1,6 @@
 {
-  "name": "health-monitor-service",
-  "version": "1.1.0",
+  "name": "monitorjs",
+  "version": "0.1.0",
   "description": "Monitor service",
   "main": "./src/index.js",
   "scripts": {
@@ -12,6 +12,7 @@
   "keywords": [],
   "author": "hieuit7",
   "license": "ISC",
+  "homepage": "http://gitlab.resource",
   "dependencies": {
     "async": "^2.0.0-rc.3",
     "babel-runtime": "^6.6.1",

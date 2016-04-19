@@ -6,9 +6,14 @@ before_script:
 stages:
   - build
   - test
-job1:
+  - deploy
+test:
   stage: test
   script:
     - mocha
   tags:
     - docker
+deploy:
+  stage: deploy
+  script:
+    - npm publish
