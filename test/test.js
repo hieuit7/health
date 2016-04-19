@@ -52,7 +52,6 @@ describe('service', function() {
           code: "OK"
         })
       }, (error) => {
-        console.log(error);
         expect(error).to.deep.equal({
           status: "success",
           code: "ERROR"
