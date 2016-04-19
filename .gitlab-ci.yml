@@ -1,8 +1,6 @@
-image: ubuntu:14.04
+image: node:5.10.1
 before_script:
-  - apt-get update -qq && apt-get install -y curl
-  - curl -sL https://deb.nodesource.com/setup_5.10.1 | sudo -E bash -
-  - sudo apt-get install -y nodejs
+  - apt-get update -qq && apt-get install mocha
   - npm install 
 stages:
   - build
