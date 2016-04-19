@@ -1,6 +1,6 @@
 image: node:5.10.1
 before_script:
-  - apt-get update -qq && apt-get install mocha
+  - apt-get update -yqq && apt-get install -y mocha
   - npm install 
 stages:
   - build
