@@ -1,4 +1,6 @@
 image: docker-node
+before_script:
+  - npm install
 stages:
   - build
   - test
