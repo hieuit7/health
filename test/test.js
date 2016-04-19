@@ -42,7 +42,7 @@ describe('service', function() {
     });
   });
   describe('check udp port', function() {
-    it('check open udp port', function() {
+    it('check open udp port ', function() {
       var udp = service.udp({
         port: 53,
         host: "localhost"
@@ -54,7 +54,7 @@ describe('service', function() {
         })
       }, (error) => {
         expect(error).to.deep.equal({
-          status: "success",
+          status: "successs",
           code: "ERROR"
         })
       });
@@ -65,8 +65,8 @@ describe('service', function() {
       //this.timeout(12000);
       var whois = service.whois("google.tv");
       return whois.then((data) => {
-        expect(data).to.deep.equal(
-          {
+        console.log(data);
+        expect(data).to.deep.equal({
             "ip": [{
               "address": "216.58.214.228",
               "family": 4
@@ -104,7 +104,10 @@ describe('service', function() {
 
         )
       }), (error) => {
-
+        expect(error).to.deep.equal({
+          status: "success",
+          code: "ERROR"
+        });
       }
     });
   });

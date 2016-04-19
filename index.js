@@ -60,7 +60,9 @@ let server = https.createServer(options, (req, res) => {
                                 response.setData(res);
                                 resolve(response);
                             }, (error) => {
-
+                                debug(error);
+                                response.setData(error);
+                                resolve(response);
                             })
                         }, (error) => {
                             debug(error + "");
@@ -180,7 +182,7 @@ let server = https.createServer(options, (req, res) => {
 
 
 });
-// server.listen(8000, "192.168.150.129", 1, (req, res) => {
-//     console.log(req);
-// });
+server.listen(8000, "192.168.150.129", 1, (req, res) => {
+    console.log(req);
+});
 module.exports = {server:server,service:service};

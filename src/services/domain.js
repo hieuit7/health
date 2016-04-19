@@ -56,7 +56,10 @@ class Domain {
         return new Promise((resolve, reject) => {
             whois(domain, {}, (error, data) => {
                 if (error) {
-                    reject(error);
+                    reject({
+                        status: "success",
+                        code: "ERROR"
+                    });
                 }
                 else {
                     //dosomething to get lookup
@@ -131,11 +134,10 @@ class Domain {
                         resolve(retData);
                     }, (error) => {
                         retData = _.assign({
-                            ip: error
+                            ip: undefined
                         }, retData);
                         resolve(retData);
                     });
-
                 }
             }, (data) => {
                 return this.filterData(data);
@@ -155,7 +157,6 @@ class Domain {
                 else {
                     resolve(address);
                 }
-
             })
         });
     }
