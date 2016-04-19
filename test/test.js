@@ -42,9 +42,9 @@ describe('service', function() {
     });
   });
   describe('check udp port', function() {
-    it('check open udp port ', function() {
+    it('check open udp port return ok', function() {
       var udp = service.udp({
-        port: 53,
+        port: 22,
         host: "localhost"
       });
       return udp.then((data) => {
@@ -54,7 +54,24 @@ describe('service', function() {
         })
       }, (error) => {
         expect(error).to.deep.equal({
-          status: "successs",
+          status: "success",
+          code: "OK"
+        })
+      });
+    })
+    it('check open udp port return error', function() {
+      var udp = service.udp({
+        port: 53,
+        host: "localhost"
+      });
+      return udp.then((data) => {
+        expect(data).to.deep.equal({
+          status: "success",
+          code: "ERROR"
+        })
+      }, (error) => {
+        expect(error).to.deep.equal({
+          status: "success",
           code: "ERROR"
         })
       });
