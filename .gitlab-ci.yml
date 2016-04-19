@@ -1,8 +1,4 @@
-image: node:5.10.1
-before_script:
-  - apt-get update -yqq && apt-get install -y mocha
-  - npm install
-  - npm install -g mocha
+image: docker-node
 stages:
   - build
   - test
