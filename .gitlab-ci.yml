@@ -1,7 +1,6 @@
 image: docker-node
 before_script:
   - npm install
-  - npm install -g mocha
 stages:
   - build
   - test
