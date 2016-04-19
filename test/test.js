@@ -1,3 +1,4 @@
+"use strict"
 var chai = require("chai");
 var expect = require('chai').expect;
 var service = require("../src/services/services.js");
