@@ -8,14 +8,14 @@ const Ssh = require("./ssh.js");
 const ElasticSearch = require("./elasticsearch.js");
 const MongoDb = require("./mongodb.js");
 const debug = require("debug")("Client");
-
+const Udp = require("./udp.js");
 let Promise = require("promise");
 
 class Client extends EventEmitter {
     constructor() {
         super();
-        var _socket = undefined;
-        var config = {
+        let _socket = undefined;
+        let config = {
             host: undefined,
             port: undefined,
             localAddress: "localhost",
@@ -43,7 +43,7 @@ class Client extends EventEmitter {
                 let whoisRet = whois.whois(cfg.host);
                 return whoisRet;
             case 'compareHtml':
-                let html = new Domain(cfg.host,cfg);
+                let html = new Domain(cfg.host, cfg);
                 let compare = html.compare(cfg.host);
                 return compare;
         }
@@ -76,12 +76,17 @@ class Client extends EventEmitter {
                     sshClient.connect(resolve, reject);
                     break;
                 case 'mongo':
-                    let mongo = new MongoDb(this._socket);
+                    let mongo = new MongoDb(this._socket, cfg);
                     break;
                 case 'elastic':
                     let elasticClient = new ElasticSearch(this._socket, cfg);
                     elasticClient.connect(resolve, reject);
                     break;
+                case 'udp':
+                    let udp = new Udp(this._socket,cfg);
+                    udp.connect(resolve,reject);
+                    break;
+
                 default:
                     // code
             }

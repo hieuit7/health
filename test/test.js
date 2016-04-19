@@ -17,7 +17,7 @@ describe('service', function() {
       }, (error) => {
         expect(error).to.deep.equal({
           status: "success",
-          code: "OK"
+          code: "ERROR"
         });
       });
     });
@@ -39,6 +39,26 @@ describe('service', function() {
         });
       });
     });
+  });
+  describe('check udp port', function() {
+    it('check open udp port', function() {
+      var udp = service.udp({
+        port: 53,
+        host: "localhost"
+      });
+      return udp.then((data) => {
+        expect(data).to.deep.equal({
+          status: "success",
+          code: "OK"
+        })
+      }, (error) => {
+        console.log(error);
+        expect(error).to.deep.equal({
+          status: "success",
+          code: "ERROR"
+        })
+      });
+    })
   });
   describe('check whois domain', function() {
     it('checking domain', function() {
