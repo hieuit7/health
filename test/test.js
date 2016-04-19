@@ -1,7 +1,8 @@
 "use strict"
 var chai = require("chai");
 var expect = require('chai').expect;
-var service = require("../src/services/services.js");
+var service = require("../index.js").service;
+// var service = require("../src/services/services.js");
 describe('service', function() {
   describe('#ssh()', function() {
     it('check ssh', function() {
