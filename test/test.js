@@ -82,7 +82,6 @@ describe('service', function() {
       //this.timeout(12000);
       var whois = service.whois("google.tv");
       return whois.then((data) => {
-        console.log(data);
         expect(data).to.deep.equal({
             "ip": [{
               "address": "216.58.214.228",
