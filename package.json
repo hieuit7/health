@@ -9,7 +9,7 @@
     "compile": "babel --optional runtime ./src --out-dir ./src",
     "test": "mocha"
   },
-  "keywords": [],
+  "keywords": ["Monitor lib","ssh monitor","domain monitor"],
   "author": "hieuit7",
   "license": "ISC",
   "homepage": "http://gitlab.resource",
