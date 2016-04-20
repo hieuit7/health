@@ -1,7 +1,7 @@
 {
-  "name": "health",
-  "version": "1.0.0",
-  "description": "",
+  "name": "monitorjs",
+  "version": "0.1.0",
+  "description": "Monitor service",
   "main": "./src/index.js",
   "scripts": {
     "lint": "eslint --ext .js,.es6 src",
@@ -9,9 +9,10 @@
     "compile": "babel --optional runtime ./src --out-dir ./src",
     "test": "mocha"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["Monitor lib","ssh monitor","domain monitor"],
+  "author": "hieuit7",
   "license": "ISC",
+  "homepage": "http://gitlab.resource",
   "dependencies": {
     "async": "^2.0.0-rc.3",
     "babel-runtime": "^6.6.1",

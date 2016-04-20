@@ -1,6 +1,8 @@
+"use strict"
 var chai = require("chai");
 var expect = require('chai').expect;
-var service = require("../src/services/services.js");
+var service = require("../index.js").service;
+// var service = require("../src/services/services.js");
 describe('service', function() {
   describe('#ssh()', function() {
     it('check ssh', function() {
@@ -16,7 +18,7 @@ describe('service', function() {
       }, (error) => {
         expect(error).to.deep.equal({
           status: "success",
-          code: "OK"
+          code: "ERROR"
         });
       });
     });
@@ -38,6 +40,25 @@ describe('service', function() {
         });
       });
     });
+  });
+  describe('check udp port', function() {
+    it('check open udp port', function() {
+      var udp = service.udp({
+        port: 53,
+        host: "localhost"
+      });
+      return udp.then((data) => {
+        expect(data).to.deep.equal({
+          status: "success",
+          code: "OK"
+        })
+      }, (error) => {
+        expect(error).to.deep.equal({
+          status: "success",
+          code: "ERROR"
+        })
+      });
+    })
   });
   describe('check whois domain', function() {
     it('checking domain', function() {

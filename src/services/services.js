@@ -28,5 +28,9 @@ class Service {
     cfg.host = url;
     return client.connect(cfg);
   }
+  udp(cfg){
+    cfg.protocol = 'udp';
+    return client.connect(cfg);
+  }
 };
 module.exports = new Service();

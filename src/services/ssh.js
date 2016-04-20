@@ -7,7 +7,7 @@ const Service = require("./service.js");
 const tls = require("tls");
 class Ssh extends Service {
     constructor(socket, cfg) {
-        super(socket);
+        super(socket,cfg);
         //
         //need to connect tls ?!
         //cfg.socket = socket;

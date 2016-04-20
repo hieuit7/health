@@ -67,21 +67,21 @@ let server = https.createServer(options, (req, res) => {
                         });
                         break;
                     case 'compare':
-                        request.then((data)=>{
-                           debug(data+"sss");
-                           data= JSON.parse(data);
-                           let compare = service.compare(data.host);
-                           
-                          compare.then((data)=>{
-                              response.setData(data);
-                              resolve(response);
-                          },(error)=>{
-                               
-                          })
-                        },(error)=>{
-                            debug(error+"");
+                        request.then((data) => {
+                            debug(data + "sss");
+                            data = JSON.parse(data);
+                            let compare = service.compare(data.host);
+
+                            compare.then((data) => {
+                                response.setData(data);
+                                resolve(response);
+                            }, (error) => {
+
+                            })
+                        }, (error) => {
+                            debug(error + "");
                         });
-                        break;                    
+                        break;
                     default:
                         response.setData({
                             status: "success",
@@ -138,6 +138,27 @@ let server = https.createServer(options, (req, res) => {
                         })
 
                         break;
+                    case 'udp':
+                        debug("udp");
+                        request.then((data) => {
+                                try {
+                                    let cfg = JSON.parse(data);
+                                    debug(cfg);
+                                    let ret = service.udp(cfg);
+                                    ret.then((data) => {
+                                        response.setData(data);
+                                        resolve(response);
+                                    }, (error) => {
+                                        debug(error);
+                                    })
+                                }
+                                catch (e) {
+
+                                }
+                            })
+                            // code
+                        break;
+
 
                 }
                 break;
@@ -159,7 +180,7 @@ let server = https.createServer(options, (req, res) => {
 
 
 });
-server.listen(8000, "192.168.150.129", 1, (req, res) => {
-    console.log(req);
-});
-module.exports = server;
+// server.listen(8000, "192.168.150.129", 1, (req, res) => {
+//     console.log(req);
+// });
+module.exports = {server:server,service:service};
