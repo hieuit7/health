@@ -7,6 +7,10 @@ class Service {
     cfg.protocol = "ssh";
     return client.connect(cfg);
   }
+  mongo(cfg){
+    cfg.protocol = 'mongo';
+    return client.connect(cfg);
+  }
   elasticSearch(cfg) {
     cfg.protocol = "elastic";
     return client.connect(cfg);
@@ -21,11 +25,12 @@ class Service {
     cfg.host = domain;
     return client.connect(cfg);
   }
-  compare(url){
+  compare(url,compare){
     let cfg = {};
     cfg.protocol = 'compareHtml';
     cfg.port = 0;
     cfg.host = url;
+    cfg.compare = compare || undefined;
     return client.connect(cfg);
   }
   udp(cfg){

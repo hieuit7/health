@@ -10,11 +10,11 @@ class Service {
             this.reject = undefined;
         }
     }
-    onConnect(callback) {
-        this.socket.on('connect', () => {
+    // onConnect(callback) {
+    //     this.socket.on('connect', () => {
 
-        });
-    }
+    //     });
+    // }
     onError(callback) {
         this.socket.on('error', (data) => {
             debug(data + "");
@@ -22,11 +22,11 @@ class Service {
                 status: "success",
                 code: "ERROR"
             });
+            this.socket.end();
         });
     }
     onTimeout(callback) {
-        this.socket.on('error', (data) => {
-            debug(data + "");
+        this.socket.setTimeout(10000, () => {
             callback({
                 status: "success",
                 code: "TIMEOUT"
@@ -38,7 +38,7 @@ class Service {
         this.reject = reject;
         this.onError(this.reject);
         this.onTimeout(this.reject);
-        this.onConnect(this.resolve);
+        // this.onConnect(this.resolve);
     }
 }
 module.exports = Service;

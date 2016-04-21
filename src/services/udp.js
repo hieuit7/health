@@ -34,6 +34,9 @@ class Udp extends Service {
             })
         });
     }
+    onTimeout(callback) {
+        
+    }
 
 }
 module.exports = Udp;

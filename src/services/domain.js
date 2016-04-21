@@ -10,6 +10,7 @@ const os = require('os');
 const changeCase = require('change-case');
 const _ = require("lodash");
 const JSONB = require("json-buffer");
+const net = require("net");
 class Domain {
     constructor(host, options) {
         this.host = host;
@@ -17,7 +18,6 @@ class Domain {
             options = {};
             options.port = 80;
         };
-        this.options = options;
         debug(options);
     }
     look(domain, options) {
@@ -25,32 +25,35 @@ class Domain {
         let promise = new Promise((resolve, reject) => {
             let port = options.port;
             try {
-                if (port == 80) {
-                    http.get("http://" + domain, resolve).on('error', reject);
-                }
-                else if (port == 443) {
-                    https.get("https://" + domain, resolve).on('error', reject);
-                }
-                else {
-                    throw new Error("Protocol not found");
-                }
+                let socket = net.connect(options.port, domain);
+                socket.setTimeout(2000, () => {
+                    socket.end();
+                    reject({
+                        status: "success",
+                        code: "ERROR"
+                    });
+                })
+                socket.on('connect', (data) => {
+                    socket.end();
+                    resolve({
+                        status: "success",
+                        code: "OK"
+                    });
+
+                });
+                socket.on('error', (error) => {
+                    socket.end();
+                    reject({
+                        status: "success",
+                        code: "ERROR"
+                    });
+                });
             }
             catch (e) {
                 reject(e);
             }
         });
-        return promise.then((data) => {
-            return {
-                status: "success",
-                code: "OK"
-            };
-        }, (error) => {
-            debug(error);
-            return {
-                status: "success",
-                code: "ERROR"
-            };
-        })
+        return promise;
     }
     whois(domain) {
         return new Promise((resolve, reject) => {
@@ -97,6 +100,11 @@ class Domain {
                             // code
                             expDate = 'domainExpirationDate';
                             break;
+                        case Object.keys(data).indexOf('expiry') != -1:
+                            // code
+                            expDate = 'expiry';
+                            break;
+
 
                     }
                     debug("expr " + expDate);
@@ -111,6 +119,20 @@ class Domain {
                     let count = 1;
                     let key = 'nameServer';
                     let keyTmp = key;
+                    switch (true) {
+                        case Object.keys(data).indexOf('nameServer') != -1:
+                            key = 'nameServer';
+                            break;
+                        case Object.keys(data).indexOf('ns') != -1:
+                            key = 'ns';
+                            keyTmp = key;
+                            break;
+                        case Object.keys(data).indexOf('ns1') != -1:
+                            key = 'ns';
+                            keyTmp = key + "1";
+                            count = 2;
+                            break;
+                    }
                     let nameServer = [];
                     while (Object.keys(data).indexOf(keyTmp) != -1) {
                         nameServer.push({
@@ -127,7 +149,7 @@ class Domain {
                         information: data
                     }, retData);
                     let IP = this.lookup(domain);
-                    IP.then((data) => {
+                    return IP.then((data) => {
                         retData = _.assign({
                             ip: data
                         }, retData);
@@ -160,7 +182,7 @@ class Domain {
             })
         });
     }
-    compare(url, compare) {
+    compare(url, compareData) {
         return new Promise((resolve, reject) => {
             if (_.startsWith(url, 'https://')) {
                 https.get(url, (res) => {
@@ -173,10 +195,10 @@ class Domain {
                         //resolved by http://stackoverflow.com/questions/28233505/node-js-undefined1-syntaxerror-unexpected-end-of-input
                         try {
                             let json = JSON.parse(body);
+
                             let isEqual = false;
-                            if (compare !== undefined) {
-                                compare = JSON.parse(compare);
-                                isEqual = JSON.stringify(json) == JSON.stringify(compare) ? true : false
+                            if (compareData != undefined) {
+                                isEqual = JSON.stringify(json) == JSON.stringify(compareData) ? true : false
                             }
                             let ret = {
                                 equal: isEqual,
@@ -193,7 +215,32 @@ class Domain {
                 }).on('error', reject);
             }
             else if (_.startsWith(url, 'http://')) {
-                http.get(url, resolve).on('error', reject);
+                http.get(url, (res) => {
+                    let body = '';
+                    res.on('data', (data) => {
+                        //let json = JSONB.stringify(data);
+                        body += data;
+                    })
+                    res.on('end', () => {
+                        //resolved by http://stackoverflow.com/questions/28233505/node-js-undefined1-syntaxerror-unexpected-end-of-input
+                        try {
+                            let json = JSON.parse(body);
+                            let isEqual = false;
+                            if (compareData != undefined) {
+                                isEqual = JSON.stringify(json) == JSON.stringify(compareData) ? true : false;
+                            }
+                            let ret = {
+                                equal: isEqual,
+                                data: json
+                            }
+                            resolve(ret);
+                        }
+                        catch (e) {
+                            debug(e);
+                            resolve(e);
+                        }
+                    })
+                }).on('error', reject);
             }
             else {
 

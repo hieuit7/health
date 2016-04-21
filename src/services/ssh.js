@@ -1,5 +1,4 @@
 "use strict"
-const Tunnel = require("../libs/tunnel.js");
 const fs = require("fs");
 const Socket = require("net").Socket;
 const debug = require("debug")("SSH");
@@ -32,7 +31,7 @@ class Ssh extends Service {
         this.socket.on('data', (data) => {
             debug(data+"");
             resolve({status:"success",code:"OK"});
-            this.socket.end();
+            //this.socket.end();
         });
         
     }
